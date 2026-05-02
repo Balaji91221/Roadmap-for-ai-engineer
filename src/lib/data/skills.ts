@@ -1,0 +1,68 @@
+import { Skill } from '@/lib/types'
+
+export const SKILLS: Skill[] = [
+  {
+    skill: 'Frontend Development',
+    icon: '⬡',
+    color: '#2D6A4F',
+    colorLight: '#EAF4EF',
+    colorBorder: '#A8D5B5',
+    have: ['HTML, CSS, JavaScript / TypeScript', 'React / Vue / Angular', 'REST API integration', 'Component design & state management', 'Responsive UI / UX'],
+    aiUse: [
+      { label: 'AI Demo UIs', desc: 'Build polished interfaces for model outputs and workflows.' },
+      { label: 'LLM Chat Interfaces', desc: 'Implement streaming chat experiences with robust state management.' },
+      { label: 'AI SaaS Products', desc: 'Ship full products from UI to backend for AI-driven use cases.' },
+      { label: 'Monitoring Dashboards', desc: 'Create operator dashboards for model quality, drift, and cost.' },
+    ],
+    advantage: 'HIGH',
+    note: 'Design + engineering execution is a rare combination in AI teams.',
+  },
+  {
+    skill: 'Backend REST APIs',
+    icon: '↔',
+    color: '#1E2B4A',
+    colorLight: '#EEF1F7',
+    colorBorder: '#C8D0E0',
+    have: ['REST API design (GET/POST/PUT/DELETE)', 'Authentication (JWT, OAuth)', 'Middleware, routing, error handling', 'Node.js / Express / Django / FastAPI basics', 'API versioning & documentation'],
+    aiUse: [
+      { label: 'Model Serving APIs', desc: 'Deploy models behind consistent and secure API contracts.' },
+      { label: 'LLM Gateways', desc: 'Build throttled and authenticated access layers for AI providers.' },
+      { label: 'Webhook Integrations', desc: 'Connect agent flows with external systems and events.' },
+      { label: 'Streaming Endpoints', desc: 'Deliver low-latency token streams and event pipelines.' },
+    ],
+    advantage: 'HIGH',
+    note: 'You are already close to production AI backend responsibilities.',
+  },
+  {
+    skill: 'MySQL (SQL)',
+    icon: '⊞',
+    color: '#C17E3A',
+    colorLight: '#FDF3E7',
+    colorBorder: '#E8C99A',
+    have: ['SELECT, JOIN, GROUP BY, aggregations', 'Schema design & normalization', 'Indexes, query optimization', 'Stored procedures / views', 'Transactions & ACID properties'],
+    aiUse: [
+      { label: 'Feature Engineering', desc: 'Build strong predictive features from structured transactional data.' },
+      { label: 'Data Pipelines', desc: 'Transform operational data into model-ready datasets.' },
+      { label: 'Structured ML', desc: 'Drive practical business impact using tabular ML systems.' },
+      { label: 'Text-to-SQL Agents', desc: 'Design safer, validated SQL execution in natural-language interfaces.' },
+    ],
+    advantage: 'MEDIUM-HIGH',
+    note: 'Strong SQL still differentiates practical AI engineers from prompt-only builders.',
+  },
+  {
+    skill: 'MongoDB (NoSQL)',
+    icon: '◉',
+    color: '#5B2E8A',
+    colorLight: '#F2EBFA',
+    colorBorder: '#C9A8E8',
+    have: ['Document-based data modeling', 'Aggregation pipelines', 'Indexes & query optimization', 'Schema flexibility & embedded docs', 'Atlas / cloud MongoDB'],
+    aiUse: [
+      { label: 'Vector Store Backends', desc: 'Use Atlas Vector Search with document and embedding workflows.' },
+      { label: 'Chat History Storage', desc: 'Persist conversation and memory traces as documents.' },
+      { label: 'Document AI Pipelines', desc: 'Store chunked docs and metadata for retrieval and grounding.' },
+      { label: 'Flexible ML Metadata', desc: 'Track experiments and outputs with evolving schemas.' },
+    ],
+    advantage: 'MEDIUM-HIGH',
+    note: 'Mongo experience translates well to RAG and memory-heavy agent systems.',
+  },
+]
