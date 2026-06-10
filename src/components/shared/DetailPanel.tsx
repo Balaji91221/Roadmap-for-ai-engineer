@@ -15,12 +15,18 @@ import {
   ExternalLink,
   ArrowLeft,
   ArrowRight,
+  Check,
+  Circle,
+  X,
   type LucideIcon,
 } from 'lucide-react'
 import { Week, Role } from '@/lib/types'
 import { getDivisionName, getDivisionColor } from '@/lib/utils'
 import { WEEKS } from '@/lib/data/weeks'
 import { DIVISIONS } from '@/lib/data/divisions'
+import { useProgress } from '@/contexts/ProgressContext'
+import AnimationFrame from '@/components/shared/AnimationFrame'
+import { conceptAnimForWeek } from '@/lib/anim/concept-map'
 
 const RESOURCE_ICONS: Record<string, LucideIcon> = {
   course: GraduationCap,
@@ -91,8 +97,10 @@ function LiveExample({ example, color }: { example: { title: string; tabs: { lab
   )
 }
 
-export default function DetailPanel({ week }: { week: Week }) {
+export default function DetailPanel({ week, onClose }: { week: Week; onClose?: () => void }) {
   const [activeView, setActiveView] = useState<'intro' | 'interview' | 'project' | number>('intro')
+  const { hydrated, isCompleted, toggle } = useProgress()
+  const completed = isCompleted(week.week)
   const divColor = getDivisionColor(week.div)
   const division = DIVISIONS.find((d) => d.id === week.div)
   const isLastInDiv = WEEKS.filter((w) => w.div === week.div).pop()?.week === week.week
@@ -115,13 +123,23 @@ export default function DetailPanel({ week }: { week: Week }) {
     <section className="animate-slide-up">
       {/* BREADCRUMB / BACK */}
       <div className="flex items-center justify-between gap-3 mb-5 flex-wrap">
-        <Link
-          href="/roadmap"
-          className="inline-flex items-center gap-1.5 text-[12.5px] text-txt2 hover:text-txt transition-colors"
-        >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          Back to roadmap
-        </Link>
+        {onClose ? (
+          <button
+            onClick={onClose}
+            className="inline-flex items-center gap-1.5 text-[12.5px] text-txt2 hover:text-txt transition-colors"
+          >
+            <X className="w-3.5 h-3.5" />
+            Close
+          </button>
+        ) : (
+          <Link
+            href="/roadmap"
+            className="inline-flex items-center gap-1.5 text-[12.5px] text-txt2 hover:text-txt transition-colors"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            Back to roadmap
+          </Link>
+        )}
         <div className="text-[11px] font-mono text-txt3 tabular-nums">
           Week {week.week} of {WEEKS.length}
         </div>
@@ -145,6 +163,20 @@ export default function DetailPanel({ week }: { week: Week }) {
             <h1 className="heading-display text-3xl md:text-4xl text-txt text-balance">{week.topic}</h1>
             <p className="text-txt2 text-[14px] mt-3.5 max-w-3xl leading-relaxed text-pretty">{week.intro}</p>
           </div>
+          <button
+            onClick={() => toggle(week.week)}
+            disabled={!hydrated}
+            aria-pressed={completed}
+            className={`shrink-0 inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-[13px] font-semibold transition-all disabled:opacity-50 ${
+              completed
+                ? 'text-white'
+                : 'border border-border2 bg-surface2 text-txt2 hover:text-txt hover:border-border3'
+            }`}
+            style={completed ? { background: divColor, boxShadow: `0 8px 24px -8px ${divColor}80` } : undefined}
+          >
+            {completed ? <Check className="w-4 h-4" strokeWidth={2.5} /> : <Circle className="w-4 h-4" strokeWidth={2} />}
+            {completed ? 'Completed' : 'Mark complete'}
+          </button>
         </div>
       </div>
 
@@ -154,6 +186,15 @@ export default function DetailPanel({ week }: { week: Week }) {
         <MiniStat num={String(week.interviewQs.length)} label="Interview Qs" sub="Real prep questions" color="#22C55E" />
         <MiniStat num={`~${Math.round(week.effort * 8)}h`} label="Estimated time" sub="Resource depth" color="#F59E0B" />
         <MiniStat num={week.roi || 'High'} label="ROI" sub="Skill value" color="#7C6AF7" />
+      </div>
+
+      {/* CONCEPT IN MOTION */}
+      <div className="mb-6">
+        <div className="flex items-center gap-2 mb-3">
+          <span className="w-6 h-px" style={{ background: divColor }} />
+          <p className="eyebrow">Concept in motion</p>
+        </div>
+        <AnimationFrame anim={conceptAnimForWeek(week)} color={divColor} />
       </div>
 
       {/* NAV PILLS */}

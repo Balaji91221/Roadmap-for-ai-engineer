@@ -18,6 +18,7 @@ import PageWrapper from '@/components/layout/PageWrapper'
 import SectionEyebrow from '@/components/shared/SectionEyebrow'
 import StatCard from '@/components/shared/StatCard'
 import ProgressBar from '@/components/shared/ProgressBar'
+import DashboardProgress from '@/components/pages/DashboardProgress'
 import { DIVISIONS } from '@/lib/data/divisions'
 import { WEEKS } from '@/lib/data/weeks'
 
@@ -100,6 +101,9 @@ export default function DashboardPage() {
             </div>
           </div>
         </section>
+
+        {/* LIVE PROGRESS */}
+        <DashboardProgress />
 
         {/* STATS */}
         <section className="grid grid-cols-2 xl:grid-cols-4 gap-3 mt-6">

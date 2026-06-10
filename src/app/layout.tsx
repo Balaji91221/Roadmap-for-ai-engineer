@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { DM_Mono, DM_Sans, Syne } from 'next/font/google'
 import Sidebar from '@/components/layout/Sidebar'
+import { ProgressProvider } from '@/contexts/ProgressContext'
 import './globals.css'
 
 const syne = Syne({ subsets: ['latin'], weight: ['400', '600', '700', '800'], variable: '--font-syne' })
@@ -24,10 +25,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className={`${syne.variable} ${mono.variable} ${sans.variable}`} suppressHydrationWarning>
       <body className="bg-bg text-txt min-h-screen font-sans">
-        <div className="flex min-h-screen">
-          <Sidebar />
-          <div className="flex-1 ml-16 lg:ml-56 min-w-0">{children}</div>
-        </div>
+        <ProgressProvider>
+          <div className="flex min-h-screen">
+            <Sidebar />
+            <div className="flex-1 ml-16 lg:ml-56 min-w-0">{children}</div>
+          </div>
+        </ProgressProvider>
       </body>
     </html>
   )

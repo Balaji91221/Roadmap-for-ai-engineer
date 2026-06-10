@@ -1,12 +1,13 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Search, SlidersHorizontal, X } from 'lucide-react'
 import Topbar from '@/components/layout/Topbar'
 import PageWrapper from '@/components/layout/PageWrapper'
 import FilterTabs from '@/components/shared/FilterTabs'
 import WeekCard from '@/components/shared/WeekCard'
 import SectionEyebrow from '@/components/shared/SectionEyebrow'
+import DivisionHeader from '@/components/shared/DivisionHeader'
 import { DIVISIONS } from '@/lib/data/divisions'
 import { WEEKS } from '@/lib/data/weeks'
 import { useFilter } from '@/hooks/useFilter'
@@ -24,6 +25,14 @@ export default function RoadmapClient({ calendar = false }: { calendar?: boolean
   const [diffFilter, setDiffFilter] = useState('all')
   const [search, setSearch] = useState('')
   const totalWeeks = WEEKS.length
+
+  // Honour ?div=N from links across the app (dashboard cards, week chips) on first load.
+  useEffect(() => {
+    if (calendar) return
+    const div = new URLSearchParams(window.location.search).get('div')
+    if (div && DIVISIONS.some((d) => String(d.id) === div)) setFilter(div)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const filtered = useMemo(() => {
     return WEEKS.filter((w) => {
@@ -69,6 +78,8 @@ export default function RoadmapClient({ calendar = false }: { calendar?: boolean
               : `${totalWeeks} weeks. ${DIVISIONS.length} divisions. One path.`}
           </h1>
         </div>
+
+        {!calendar && filter !== 'all' && <DivisionHeader divId={Number(filter)} />}
 
         <div className="rounded-xl border border-border bg-surface card-elevated p-3 md:p-4 mb-4">
           <p className="font-mono text-[10px] uppercase tracking-widest text-txt3 mb-2.5 px-1">
