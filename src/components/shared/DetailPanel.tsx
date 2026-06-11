@@ -26,7 +26,7 @@ import { WEEKS } from '@/lib/data/weeks'
 import { DIVISIONS } from '@/lib/data/divisions'
 import { useProgress } from '@/contexts/ProgressContext'
 import AnimationFrame from '@/components/shared/AnimationFrame'
-import { conceptAnimForWeek } from '@/lib/anim/concept-map'
+import { conceptAnimForWeek, conceptAnimForSubtopic } from '@/lib/anim/concept-map'
 
 const RESOURCE_ICONS: Record<string, LucideIcon> = {
   course: GraduationCap,
@@ -108,6 +108,14 @@ export default function DetailPanel({ week, onClose }: { week: Week; onClose?: (
   const prevWeek = WEEKS.find((w) => w.week === week.week - 1) ?? null
   const nextWeek = WEEKS.find((w) => w.week === week.week + 1) ?? null
 
+  // Each subtopic is its own topic with its own related animation; other tabs use the week concept.
+  const activeSubtopic = typeof activeView === 'number' ? week.subtopics[activeView] : null
+  const cleanSubtopicName = activeSubtopic
+    ? activeSubtopic.name.replace(/\s*\((Beginner|Intermediate|Advanced|Expert)\)/, '').trim()
+    : null
+  const conceptAnim = activeSubtopic ? conceptAnimForSubtopic(activeSubtopic.name, week) : conceptAnimForWeek(week)
+  const conceptLabel = cleanSubtopicName ?? week.topic
+
   const navItems = [
     { label: 'Overview', id: 'intro' as const, icon: null },
     ...week.subtopics.map((s, i) => ({
@@ -188,13 +196,13 @@ export default function DetailPanel({ week, onClose }: { week: Week; onClose?: (
         <MiniStat num={week.roi || 'High'} label="ROI" sub="Skill value" color="#7C6AF7" />
       </div>
 
-      {/* CONCEPT IN MOTION */}
+      {/* CONCEPT IN MOTION — follows the active subtopic tab */}
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-3">
           <span className="w-6 h-px" style={{ background: divColor }} />
-          <p className="eyebrow">Concept in motion</p>
+          <p className="eyebrow">Concept in motion · {conceptLabel}</p>
         </div>
-        <AnimationFrame anim={conceptAnimForWeek(week)} color={divColor} />
+        <AnimationFrame key={conceptAnim.id} anim={conceptAnim} color={divColor} />
       </div>
 
       {/* NAV PILLS */}

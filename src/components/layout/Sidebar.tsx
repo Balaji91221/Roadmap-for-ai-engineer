@@ -49,7 +49,7 @@ export default function Sidebar() {
         { icon: Map, label: 'Roadmap', href: '/roadmap', badge: totalWeeks },
         { icon: Waypoints, label: 'Map', href: '/map' },
         { icon: Boxes, label: 'Divisions', href: '/divisions', badge: totalDivisions },
-        { icon: Atom, label: 'Concepts', href: '/concepts', badge: 20 },
+        { icon: Atom, label: 'Concepts', href: '/concepts', badge: 29 },
         { icon: Trophy, label: 'Capstones', href: '/capstones', badge: totalDivisions },
         { icon: Library, label: 'Resources', href: '/resources' },
         { icon: Layers, label: 'Phases', href: '/phases', badge: 5 },

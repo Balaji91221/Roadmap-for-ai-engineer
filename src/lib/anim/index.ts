@@ -19,6 +19,15 @@ import A_pipeline from '@/components/anim/A_pipeline'
 import A_autoscale from '@/components/anim/A_autoscale'
 import A_cicd from '@/components/anim/A_cicd'
 import A_monitoring from '@/components/anim/A_monitoring'
+import A_mcp from '@/components/anim/A_mcp'
+import A_a2a from '@/components/anim/A_a2a'
+import A_cnn from '@/components/anim/A_cnn'
+import A_backprop from '@/components/anim/A_backprop'
+import A_quantization from '@/components/anim/A_quantization'
+import A_cache from '@/components/anim/A_cache'
+import A_guardrail from '@/components/anim/A_guardrail'
+import A_container from '@/components/anim/A_container'
+import A_iac from '@/components/anim/A_iac'
 
 /** One explainer animation per division, keyed by division id (1–8). */
 export const ANIM: Record<number, AnimSpec> = {
@@ -53,6 +62,15 @@ const ALL: AnimSpec[] = [
   A_autoscale,
   A_cicd,
   A_monitoring,
+  A_mcp,
+  A_a2a,
+  A_cnn,
+  A_backprop,
+  A_quantization,
+  A_cache,
+  A_guardrail,
+  A_container,
+  A_iac,
 ]
 
 /** Every concept animation in the library, keyed by its id. */

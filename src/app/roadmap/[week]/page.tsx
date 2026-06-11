@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Topbar from '@/components/layout/Topbar'
 import PageWrapper from '@/components/layout/PageWrapper'
-import DetailPanel from '@/components/shared/DetailPanel'
+import TopicLab from '@/components/pages/TopicLab'
 import { WEEKS } from '@/lib/data/weeks'
 import { DIVISIONS } from '@/lib/data/divisions'
 import { getDifficultyColor } from '@/lib/utils'
@@ -62,7 +62,7 @@ export default async function WeekDetailPage({
         ]}
       />
       <PageWrapper>
-        <DetailPanel week={weekItem} />
+        <TopicLab week={weekItem} />
       </PageWrapper>
     </>
   )
