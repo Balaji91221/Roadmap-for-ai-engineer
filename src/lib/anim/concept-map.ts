@@ -1,5 +1,9 @@
 import type { Week } from '@/lib/types'
-import { ANIM, ANIM_LIBRARY, type AnimSpec } from '@/lib/anim'
+import { ANIM_LIBRARY, type AnimSpec } from '@/lib/anim'
+import { conceptWebAnim } from '@/lib/anim/concept-web'
+
+type WeekLike = Pick<Week, 'topic' | 'div' | 'subtopics' | 'week'>
+const cleanName = (s: string) => s.replace(/\s*\((Beginner|Intermediate|Advanced|Expert)\)/, '').trim()
 
 // Map a week to the best-fit concept animation by matching keywords in its topic.
 // Rules are ordered most-specific first; the division animation is the fallback.
@@ -51,22 +55,33 @@ export function conceptAnimId(topic: string): string | null {
   return null
 }
 
-/** Best-fit concept animation for any text (e.g. a subtopic name), falling back to a division. */
-export function conceptAnimForText(text: string, div: number): AnimSpec {
-  const id = conceptAnimId(text)
-  return (id && ANIM_LIBRARY[id]) || ANIM[div]
+const webCaption = (topic: string) => `The core parts of ${topic} and how they connect — pick a step to focus it.`
+
+/** Content-driven fallback: a node graph of this week's own subtopics (optionally highlighting one). */
+function webForWeek(week: WeekLike, highlight: number): AnimSpec {
+  const nodes = (week.subtopics ?? []).map((s) => cleanName(s.name))
+  return conceptWebAnim({
+    id: `web_w${week.week}${highlight >= 0 ? `_${highlight}` : ''}`,
+    title: week.topic,
+    nodes: nodes.length ? nodes : [week.topic],
+    caption: webCaption(week.topic),
+    highlight,
+  })
 }
 
-/** Best-fit concept animation for a week, falling back to its division explainer. */
-export function conceptAnimForWeek(week: Pick<Week, 'topic' | 'div'>): AnimSpec {
-  return conceptAnimForText(week.topic, week.div)
+/** Best-fit animation for a week: a matching archetype, else its own content-driven concept web. */
+export function conceptAnimForWeek(week: WeekLike): AnimSpec {
+  const id = conceptAnimId(week.topic)
+  return (id && ANIM_LIBRARY[id]) || webForWeek(week, -1)
 }
 
 /**
- * Animation for a subtopic: its own keyword match if any, otherwise inherit the WEEK's concept
- * (more relevant than the division default for generically-named subtopics like "State Management").
+ * Animation for a subtopic: its own matching archetype if any, otherwise this week's concept web
+ * with the active subtopic highlighted — so every subtopic shows a relevant, on-topic visual.
  */
-export function conceptAnimForSubtopic(subtopicName: string, week: Pick<Week, 'topic' | 'div'>): AnimSpec {
+export function conceptAnimForSubtopic(subtopicName: string, week: WeekLike): AnimSpec {
   const id = conceptAnimId(subtopicName)
-  return (id && ANIM_LIBRARY[id]) || conceptAnimForWeek(week)
+  if (id && ANIM_LIBRARY[id]) return ANIM_LIBRARY[id]
+  const idx = (week.subtopics ?? []).findIndex((s) => s.name === subtopicName)
+  return webForWeek(week, idx)
 }
