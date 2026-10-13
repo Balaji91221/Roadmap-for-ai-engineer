@@ -1,6 +1,8 @@
 # AI Engineering Mastery — Zero to Hero
 
-![Agentic AI Roadmap](agentic%20ai.jpeg)
+**An interactive learning workspace for studying AI engineering, one topic and project at a time.**
+
+[Run locally](#getting-started) · [Curriculum](#the-8-divisions) · [Architecture](#architecture)
 
 > **84 weeks · 8 divisions · From ML foundations to production-grade agent systems & DevOps**
 
@@ -93,7 +95,7 @@ The full DevOps toolkit from zero:
 ## Project Structure
 
 ```
-learn-everything/
+Roadmap-for-ai-engineer/
 ├── src/
 │   ├── app/                    # Next.js pages
 │   ├── components/
@@ -113,10 +115,6 @@ learn-everything/
 │           ├── gaps.ts         # Gap analysis data
 │           ├── ladder.ts       # Career ladder steps
 │           └── trending.ts     # Trending AI topics
-├── content/
-│   └── colab-notebooks/        # Generated Jupyter notebooks per week
-├── scripts/
-│   └── generate-topic-notebooks.mjs
 └── package.json
 ```
 
@@ -129,10 +127,30 @@ npm install
 npm run dev
 ```
 
-Generate Colab notebooks:
-```bash
-node scripts/generate-topic-notebooks.mjs
+Open [localhost:3000](http://localhost:3000). Start with the roadmap, open a week, work through its resources, and use the capstone pages to connect study to a concrete implementation.
+
+The package also declares `npm run build`, `npm start`, and `npm run lint`. The `generate:notebooks` script references a generator that is not present in the current repository, so notebook generation is not included in this setup.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    D[Curriculum data in src/lib/data] --> P[Next.js pages]
+    D --> A[Read-only API routes]
+    P --> C[Interactive components and visual labs]
+    C --> S[Progress context]
 ```
+
+The curriculum is maintained as TypeScript data. Next.js routes organize it into weeks, divisions, concepts, and capstones; client components provide filtering, progress controls, and visual experiments. The trending endpoint reads the bundled topic catalog, rather than fetching a live news feed.
+
+## Engineering focus
+
+This project addresses the difficulty of turning a large list of AI topics into a sequence of study and practice. It brings prerequisites, resources, projects, interview prompts, and progress views into one interface. The curriculum describes learning activities; it does not claim to implement all the systems being taught.
+
+- [`src/lib/data/`](src/lib/data/): curriculum and resource catalogs.
+- [`src/components/playground/`](src/components/playground/): interactive concept experiments.
+- [`src/contexts/ProgressContext.tsx`](src/contexts/ProgressContext.tsx): progress state.
+- [`src/app/api/`](src/app/api/): curriculum API routes.
 
 ---
 
